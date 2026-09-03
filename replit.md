@@ -1,6 +1,6 @@
-# [Project name]
+# Language Tracker Pocket
 
-_Replace the heading above with the project's name, and this line with one sentence describing what this app does for users._
+Aplicativo pessoal para acompanhar a evolução no inglês por meio de registros diários, metas, vocabulário, streak, gráficos e jornada CAIZ.
 
 ## Run & Operate
 
@@ -22,15 +22,22 @@ _Replace the heading above with the project's name, and this line with one sente
 
 ## Where things live
 
-_Populate as you build — short repo map plus pointers to the source-of-truth file for DB schema, API contracts, theme files, etc._
+- `artifacts/language-tracker-pocket` — frontend React/Vite, rotas e componentes da aplicação.
+- `artifacts/api-server/src/routes/tracker.ts` — endpoints do tracker e validação das entradas.
+- `artifacts/api-server/src/lib/tracker.ts` — cálculos de dashboard, streak, estimativa, gráficos e CAIZ.
+- `lib/db/src/schema/` — tabelas persistentes de estudos, configurações e resumos mensais.
+- `lib/api-spec/openapi.yaml` — fonte de verdade dos contratos da API.
 
 ## Architecture decisions
 
-_Populate as you build — non-obvious choices a reader couldn't infer from the code (3-5 bullets)._
+- O vocabulário atual é calculado como vocabulário inicial + palavras registradas; o valor inicial padrão é 4.242 e a meta diária padrão é fixa em 12.
+- Datas de estudo são armazenadas como datas de calendário (`YYYY-MM-DD`) para evitar deslocamentos de fuso; timestamps continuam sendo instantes.
+- Todas as métricas visíveis no frontend vêm dos endpoints agregados do servidor, evitando gráficos ou streaks calculados apenas no navegador.
+- O frontend usa hooks gerados a partir do OpenAPI e invalida consultas relacionadas depois de cada mutação.
 
 ## Product
 
-_Describe the high-level user-facing capabilities of this app once they exist._
+O produto oferece dashboard, registro diário com CRUD, progresso com gráficos, jornada CAIZ, histórico com filtros, resumo mensal com reflexões persistentes, playlists e configurações com dark mode. O layout preserva a identidade clara e laranja do projeto de referência e se adapta para navegação mobile.
 
 ## User preferences
 

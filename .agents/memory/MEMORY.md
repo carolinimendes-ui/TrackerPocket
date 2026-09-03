@@ -1,0 +1,1 @@
+- [OpenAPI and Zod compatibility](openapi-zod-compatibility.md) — generated integer validators may require Zod 4 while this workspace currently resolves Zod 3.
