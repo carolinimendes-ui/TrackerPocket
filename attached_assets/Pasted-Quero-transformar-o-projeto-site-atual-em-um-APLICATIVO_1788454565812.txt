@@ -1,0 +1,766 @@
+Quero transformar o projeto/site atual em um **APLICATIVO WEB FUNCIONAL**, mantendo e aprimorando o design que já foi criado.
+
+URL do projeto/site atual:
+https://2f95023920a941939fb447e679454120.prod.enterapp.pro
+
+# INSTRUÇÃO PRINCIPAL
+
+Não quero que você simplesmente crie outra landing page.
+
+Quero transformar o projeto atual em um verdadeiro **web app de acompanhamento de estudos de idiomas**, com frontend, backend, banco de dados, persistência de dados, cálculos automáticos, gráficos, histórico e interface responsiva.
+
+Antes de modificar qualquer coisa:
+
+1. Analise cuidadosamente o projeto atual.
+2. Identifique a estrutura visual existente.
+3. Preserve o máximo possível do design atual.
+4. Preserve textos, componentes, identidade visual e layout que já estejam bons.
+5. Não substitua tudo por um template genérico.
+6. Transforme as partes estáticas em funcionalidades reais.
+
+O resultado deve parecer um produto SaaS moderno e premium, e não apenas um site.
+
+---
+
+# 📒 PRODUTO
+
+Nome:
+
+📒 🟠 Language Tracker Pocket
+
+Objetivo:
+
+Um aplicativo pessoal para acompanhar minha evolução no inglês.
+
+O app deve permitir registrar meus estudos diariamente e acompanhar:
+
+* vocabulário;
+* palavras novas;
+* tempo de estudo;
+* metas;
+* progresso;
+* streak;
+* histórico;
+* gráficos;
+* evolução mensal;
+* jornada CAIZ.
+
+---
+
+# 👤 DADOS INICIAIS
+
+Configurar inicialmente:
+
+Idioma:
+Inglês
+
+Vocabulário atual:
+4.242 palavras
+
+Meta de vocabulário:
+6.000 palavras
+
+Meta diária:
+12 palavras novas
+
+Tempo médio disponível:
+1h a 1h30 por dia
+
+Início da meta:
+Junho de 2026
+
+Progresso atual:
+4.242 / 6.000 = aproximadamente 70,7%
+
+Palavras restantes:
+1.758
+
+Próximo marco:
+5.000 palavras
+
+Palavras restantes até o próximo marco:
+758
+
+IMPORTANTE:
+
+4.242 é meu vocabulário ATUAL.
+
+Não utilizar 3.500 nem 3.754 como vocabulário atual.
+
+---
+
+# 🎯 META DIÁRIA
+
+Minha meta diária deve ser:
+
+12 palavras novas.
+
+Essa meta é FIXA.
+
+Não aumentar automaticamente para 20, 25 ou qualquer outro número.
+
+O sistema pode mostrar uma estimativa de conclusão baseada no meu ritmo real, mas essa estimativa não deve alterar minha meta.
+
+Exemplo:
+
+Meta diária:
+12 palavras
+
+Progresso hoje:
+8 / 12
+
+Faltam:
+4 palavras
+
+Quando atingir:
+
+12 / 12
+
+mostrar:
+
+“Meta diária concluída”
+
+---
+
+# 🧠 JORNADA CAIZ
+
+Criar uma jornada visual baseada nestes níveis:
+
+1. Viajante — 1.500 palavras
+2. Conexão — 3.000 palavras
+3. Negócios — 5.000 palavras
+4. Acadêmico — 10.000 palavras
+5. Maestria — 20.000 palavras
+
+Minha situação atual:
+
+3ª Camada — Negócios
+
+Vocabulário atual:
+4.242
+
+Próximo objetivo:
+5.000
+
+Faltam:
+758
+
+A interface deve deixar visualmente claro:
+
+✓ Viajante
+✓ Conexão
+◉ Negócios — VOCÊ ESTÁ AQUI
+○ Acadêmico
+○ Maestria
+
+Criar uma timeline moderna, elegante e tecnológica.
+
+---
+
+# 📊 DASHBOARD
+
+Criar uma dashboard funcional.
+
+No topo:
+
+“Olá, Carolini 👋”
+
+“Continue construindo seu inglês.”
+
+Criar cards de métricas:
+
+### VOCABULÁRIO
+
+4.242 / 6.000
+
+### PROGRESSO
+
+70,7%
+
+### META DIÁRIA
+
+12 palavras
+
+### PRÓXIMO MARCO
+
+5.000
+
+### TEMPO ESTUDADO
+
+valor calculado pelos registros
+
+### STREAK
+
+valor calculado pelos registros
+
+Todos esses números precisam ser dinâmicos.
+
+Se eu adicionar um estudo, o dashboard deve atualizar automaticamente.
+
+---
+
+# 📝 REGISTRO DIÁRIO
+
+Criar uma página:
+
+🟠 Registro Diário
+
+Criar formulário:
+
+Data
+
+O que você fez hoje?
+
+Palavras novas
+
+Tempo estudado (min)
+
+Botão:
+
+“Salvar estudo”
+
+Ao salvar:
+
+* persistir no banco de dados;
+* atualizar dashboard;
+* atualizar vocabulário;
+* atualizar meta;
+* atualizar gráficos;
+* atualizar streak;
+* atualizar histórico;
+* atualizar resumo mensal.
+
+Permitir:
+
+* editar;
+* excluir;
+* visualizar registros.
+
+---
+
+# 🗄️ BANCO DE DADOS
+
+Criar banco de dados persistente.
+
+Tabela:
+
+meus_estudos
+
+Campos:
+
+id
+data
+mes
+descricao
+palavras_novas
+tempo_estudado_minutos
+created_at
+updated_at
+
+Os dados NÃO podem depender apenas do estado do navegador.
+
+Depois de atualizar a página, os dados devem continuar existindo.
+
+Depois de fechar o navegador e abrir novamente, os dados devem continuar existindo.
+
+---
+
+# 📈 VOCABULÁRIO
+
+Criar seção:
+
+“Meu Vocabulário”
+
+Mostrar:
+
+Vocabulário atual
+4.242
+
+Meta
+6.000
+
+Restante
+1.758
+
+Progresso
+70,7%
+
+Criar uma barra de progresso elegante.
+
+Quando eu registrar novas palavras, atualizar automaticamente.
+
+Exemplo:
+
+4.242 + 12 = 4.254
+
+---
+
+# 🔥 STREAK
+
+Criar sistema de streak baseado nas datas dos estudos.
+
+Mostrar:
+
+Streak atual
+
+Maior streak
+
+Dias estudados
+
+Exemplo:
+
+🔥 7 dias seguidos
+
+O cálculo deve considerar as datas reais dos registros.
+
+---
+
+# 📊 GRÁFICOS
+
+Criar gráficos dinâmicos.
+
+### Palavras novas por dia
+
+Mostrar evolução diária.
+
+### Tempo estudado
+
+Mostrar minutos estudados ao longo do tempo.
+
+### Evolução do vocabulário
+
+Mostrar crescimento desde:
+
+4.242
+
+até:
+
+6.000
+
+### Estudos por mês
+
+Mostrar:
+
+Janeiro
+Fevereiro
+Março
+etc.
+
+Os gráficos devem ser alimentados pelo banco de dados.
+
+Não utilizar gráficos falsos ou valores aleatórios.
+
+---
+
+# 📅 HISTÓRICO
+
+Criar página:
+
+📅 Histórico
+
+Mostrar todos os estudos registrados.
+
+Exemplo:
+
+03/09/2026
+12 palavras
+90 minutos
+Estudei listening e vocabulário
+
+02/09/2026
+10 palavras
+60 minutos
+Estudei reading
+
+Permitir:
+
+Editar
+
+Excluir
+
+Criar filtros:
+
+* mês;
+* período;
+* palavras;
+* tempo estudado.
+
+---
+
+# 🗓️ RESUMO MENSAL
+
+Criar:
+
+🟠 Resumo Mensal
+
+Mostrar automaticamente:
+
+Total de palavras novas
+
+Total de minutos estudados
+
+Dias estudados
+
+Média de palavras por dia
+
+Média de minutos por dia
+
+Maior streak
+
+Também permitir registrar:
+
+“O que foi bom nesse mês?”
+
+“O que você vai tentar melhorar no próximo?”
+
+Essas informações precisam ser persistidas.
+
+---
+
+# 📅 ESTIMATIVA DE CONCLUSÃO
+
+Criar cálculo baseado no desempenho real.
+
+Mostrar:
+
+“Média atual”
+
+“Estimativa para chegar a 6.000 palavras”
+
+Exemplo:
+
+Média atual:
+11,4 palavras/dia
+
+Estimativa:
+XX/XX/XXXX
+
+IMPORTANTE:
+
+Não alterar a meta diária de 12.
+
+A estimativa é apenas informativa.
+
+Se ainda houver poucos registros:
+
+“Registre mais alguns dias para calcular uma estimativa confiável.”
+
+---
+
+# 🎵 PLAYLISTS
+
+Manter a seção:
+
+🎵 Playlists para estudar
+
+Spotify:
+
+https://open.spotify.com/playlist/0naAZYIZLwHvozERFayJFS
+
+YouTube:
+
+https://www.youtube.com/watch?v=jc51aFkLKRw&t=18s
+
+Os links devem funcionar corretamente.
+
+---
+
+# 🧭 NAVEGAÇÃO
+
+Desktop:
+
+Sidebar lateral.
+
+Itens:
+
+Dashboard
+Registro diário
+Progresso
+CAIZ
+Histórico
+Resumo mensal
+Playlists
+Configurações
+
+O item ativo deve possuir destaque visual.
+
+Mobile:
+
+Criar navegação inferior.
+
+Itens:
+
+Início
+Registrar
+Progresso
+Histórico
+Perfil
+
+---
+
+# 📱 MOBILE
+
+O aplicativo deve ser completamente responsivo.
+
+Não quero simplesmente diminuir a versão desktop.
+
+No celular:
+
+* cards devem reorganizar;
+* gráficos devem se adaptar;
+* botões devem ser fáceis de tocar;
+* formulários devem ocupar corretamente a tela;
+* navegação deve ser otimizada;
+* tabelas devem possuir comportamento adequado;
+* sidebar deve virar navegação mobile.
+
+O aplicativo deve parecer um verdadeiro aplicativo quando aberto no celular.
+
+---
+
+# 🎨 DESIGN
+
+MANTER A IDENTIDADE VISUAL DO PROJETO ATUAL.
+
+Porém, refiná-la para parecer um:
+
+**produto SaaS tecnológico premium.**
+
+Características:
+
+* moderno;
+* tecnológico;
+* sofisticado;
+* minimalista;
+* elegante;
+* clean;
+* profissional;
+* bastante espaço em branco;
+* excelente hierarquia visual.
+
+Paleta principal:
+
+* branco;
+* off-white;
+* cinza claro;
+* grafite;
+* preto;
+* laranja como cor de destaque.
+
+O laranja deve ser utilizado estrategicamente.
+
+Não transformar toda a interface em laranja.
+
+---
+
+# ✨ COMPONENTES
+
+Utilizar:
+
+* cards modernos;
+* bordas sutis;
+* sombras leves;
+* cantos arredondados;
+* progress bars;
+* badges;
+* tooltips;
+* modais;
+* dropdowns;
+* toasts;
+* estados de loading;
+* estados vazios.
+
+Utilizar Lucide Icons ou biblioteca equivalente.
+
+Não utilizar emojis como ícones principais de navegação.
+
+Emojis podem continuar nos títulos e nomes das seções.
+
+---
+
+# 🎬 MICROINTERAÇÕES
+
+Adicionar:
+
+* hover;
+* transições suaves;
+* animação de progresso;
+* feedback ao salvar;
+* feedback ao atingir meta;
+* animação discreta dos números;
+* loading states;
+* toast de confirmação.
+
+Evitar excesso de animações.
+
+Não utilizar estética cyberpunk.
+
+Não utilizar excesso de neon.
+
+Não utilizar excesso de glow.
+
+Não utilizar visual gamer.
+
+Quero:
+
+TECNOLOGIA + PREMIUM + MINIMALISMO.
+
+---
+
+# 🌙 DARK MODE
+
+Adicionar Dark Mode opcional.
+
+O modo escuro deve manter:
+
+* aparência premium;
+* excelente contraste;
+* visual tecnológico;
+* pouca utilização de brilho;
+* laranja como destaque.
+
+---
+
+# ⚙️ CONFIGURAÇÕES
+
+Criar página de configurações.
+
+Permitir alterar:
+
+Idioma
+
+Meta diária
+
+Meta de vocabulário
+
+Preferências visuais
+
+Valores iniciais:
+
+Idioma:
+Inglês
+
+Meta diária:
+12
+
+Meta:
+6.000
+
+Vocabulário inicial:
+4.242
+
+---
+
+# 🔐 ESTRUTURA DO APP
+
+Organizar corretamente o projeto como aplicação web.
+
+Separar:
+
+frontend
+
+backend
+
+database
+
+components
+
+pages
+
+services
+
+utils
+
+Não criar tudo em um único arquivo.
+
+Utilizar uma arquitetura limpa e fácil de manter.
+
+---
+
+# 💾 PERSISTÊNCIA
+
+Toda informação criada pelo usuário precisa ser persistente.
+
+Não utilizar somente:
+
+localStorage
+
+como solução principal para os dados.
+
+Utilizar banco de dados apropriado.
+
+O usuário deve conseguir:
+
+criar;
+
+visualizar;
+
+editar;
+
+excluir;
+
+seus registros.
+
+---
+
+# 🧪 TESTE
+
+Depois de implementar, teste os principais fluxos.
+
+Teste:
+
+1. Abrir dashboard.
+2. Criar estudo.
+3. Salvar estudo.
+4. Atualizar página.
+5. Confirmar que estudo continua salvo.
+6. Editar estudo.
+7. Excluir estudo.
+8. Confirmar atualização do dashboard.
+9. Confirmar atualização dos gráficos.
+10. Confirmar atualização do streak.
+11. Confirmar atualização do resumo mensal.
+12. Testar interface mobile.
+13. Testar navegação.
+14. Verificar possíveis erros de console.
+15. Verificar se não existem botões sem funcionalidade.
+
+---
+
+# 🚨 REGRA MAIS IMPORTANTE
+
+NÃO quero apenas uma simulação visual.
+
+Quero um:
+
+# WEB APP REAL E FUNCIONAL
+
+com:
+
+Frontend
+Backend
+Banco de dados
+CRUD
+Persistência
+Dashboard
+Metas
+Progresso
+Gráficos
+Histórico
+Streak
+Resumo mensal
+Jornada CAIZ
+Responsividade
+Experiência mobile.
+
+Primeiro analise o projeto existente.
+
+Depois transforme-o gradualmente em uma aplicação funcional.
+
+Preserve o design existente sempre que possível.
+
+Não recrie uma landing page.
+
+Não substitua o projeto inteiro por um template genérico.
+
+O resultado final deve parecer um aplicativo SaaS pessoal de alta qualidade.

@@ -1,0 +1,28 @@
+kind = "web"
+previewPath = "/"
+title = "Language Tracker Pocket"
+description = "Aplicativo pessoal para acompanhar a evolução no inglês, com registros de estudo, vocabulário, metas, streak, gráficos, histórico, resumo mensal e jornada CAIZ."
+version = "1.0.0"
+id = "artifacts/language-tracker-pocket"
+router = "path"
+
+[[services]]
+name = "web"
+paths = [ "/" ]
+localPort = 20307
+
+[services.development]
+run = "pnpm --filter @workspace/language-tracker-pocket run dev"
+
+[services.production]
+build = [ "pnpm", "--filter", "@workspace/language-tracker-pocket", "run", "build" ]
+serve = "static"
+publicDir = "artifacts/language-tracker-pocket/dist/public"
+
+[[services.production.rewrites]]
+from = "/*"
+to = "/index.html"
+
+[services.env]
+PORT = "20307"
+BASE_PATH = "/"

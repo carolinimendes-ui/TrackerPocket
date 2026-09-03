@@ -3,13 +3,23 @@ info:
   # Do not change the title, if the title changes, the import paths will be broken
   title: Api
   version: 0.1.0
-  description: API specification
+  description: API for Language Tracker Pocket
 servers:
   - url: /api
     description: Base API path
 tags:
   - name: health
     description: Health operations
+  - name: studies
+    description: Daily study records
+  - name: dashboard
+    description: Dashboard aggregates
+  - name: progress
+    description: Progress and CAIZ journey
+  - name: settings
+    description: Tracker settings
+  - name: monthly
+    description: Monthly reflections and aggregates
 paths:
   /healthz:
     get:
@@ -24,13 +34,502 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/HealthStatus"
+  /studies:
+    get:
+      operationId: listStudies
+      tags: [studies]
+      summary: List study records
+      parameters:
+        - $ref: "#/components/parameters/Month"
+        - $ref: "#/components/parameters/From"
+        - $ref: "#/components/parameters/To"
+        - $ref: "#/components/parameters/MinWords"
+        - $ref: "#/components/parameters/MaxWords"
+        - $ref: "#/components/parameters/MinMinutes"
+        - $ref: "#/components/parameters/MaxMinutes"
+      responses:
+        "200":
+          description: Study records
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Study"
+    post:
+      operationId: createStudy
+      tags: [studies]
+      summary: Create a study record
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/StudyInput"
+      responses:
+        "201":
+          description: Created study record
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Study"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+  /studies/{id}:
+    patch:
+      operationId: updateStudy
+      tags: [studies]
+      summary: Update a study record
+      parameters:
+        - $ref: "#/components/parameters/StudyId"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/StudyUpdate"
+      responses:
+        "200":
+          description: Updated study record
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Study"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "404":
+          $ref: "#/components/responses/NotFound"
+    delete:
+      operationId: deleteStudy
+      tags: [studies]
+      summary: Delete a study record
+      parameters:
+        - $ref: "#/components/parameters/StudyId"
+      responses:
+        "204":
+          description: Deleted
+        "404":
+          $ref: "#/components/responses/NotFound"
+  /dashboard:
+    get:
+      operationId: getDashboard
+      tags: [dashboard]
+      summary: Get dashboard summary
+      responses:
+        "200":
+          description: Dashboard summary
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Dashboard"
+  /progress:
+    get:
+      operationId: getProgress
+      tags: [progress]
+      summary: Get chart data and CAIZ journey
+      parameters:
+        - $ref: "#/components/parameters/Range"
+      responses:
+        "200":
+          description: Progress data
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Progress"
+  /settings:
+    get:
+      operationId: getSettings
+      tags: [settings]
+      summary: Get tracker settings
+      responses:
+        "200":
+          description: Tracker settings
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Settings"
+    put:
+      operationId: updateSettings
+      tags: [settings]
+      summary: Update tracker settings
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SettingsInput"
+      responses:
+        "200":
+          description: Updated settings
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Settings"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+  /monthly-summaries:
+    get:
+      operationId: listMonthlySummaries
+      tags: [monthly]
+      summary: List monthly summaries
+      responses:
+        "200":
+          description: Monthly summaries
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/MonthlySummary"
+  /monthly-summaries/{month}:
+    get:
+      operationId: getMonthlySummary
+      tags: [monthly]
+      summary: Get a monthly summary
+      parameters:
+        - $ref: "#/components/parameters/MonthPath"
+      responses:
+        "200":
+          description: Monthly summary
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MonthlySummary"
+    put:
+      operationId: upsertMonthlySummary
+      tags: [monthly]
+      summary: Save a monthly reflection
+      parameters:
+        - $ref: "#/components/parameters/MonthPath"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/MonthlySummaryInput"
+      responses:
+        "200":
+          description: Monthly summary
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MonthlySummary"
+        "400":
+          $ref: "#/components/responses/BadRequest"
 components:
+  parameters:
+    StudyId:
+      name: id
+      in: path
+      required: true
+      schema:
+        type: number
+        minimum: 1
+    Month:
+      name: month
+      in: query
+      required: false
+      schema:
+        type: string
+        pattern: "^[0-9]{4}-[0-9]{2}$"
+    MonthPath:
+      name: month
+      in: path
+      required: true
+      schema:
+        type: string
+        pattern: "^[0-9]{4}-[0-9]{2}$"
+    From:
+      name: from
+      in: query
+      required: false
+      schema:
+        type: string
+        format: date
+    To:
+      name: to
+      in: query
+      required: false
+      schema:
+        type: string
+        format: date
+    MinWords:
+      name: minWords
+      in: query
+      required: false
+      schema:
+        type: number
+        minimum: 0
+    MaxWords:
+      name: maxWords
+      in: query
+      required: false
+      schema:
+        type: number
+        minimum: 0
+    MinMinutes:
+      name: minMinutes
+      in: query
+      required: false
+      schema:
+        type: number
+        minimum: 0
+    MaxMinutes:
+      name: maxMinutes
+      in: query
+      required: false
+      schema:
+        type: number
+        minimum: 0
+    Range:
+      name: range
+      in: query
+      required: false
+      schema:
+        type: number
+        minimum: 7
+        maximum: 365
+        default: 30
+  responses:
+    BadRequest:
+      description: Invalid input
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Error"
+    NotFound:
+      description: Resource not found
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Error"
   schemas:
     HealthStatus:
       type: object
       properties:
         status:
           type: string
-      required:
-        - status
-
+      required: [status]
+    Error:
+      type: object
+      properties:
+        error:
+          type: string
+      required: [error]
+    Study:
+      type: object
+      properties:
+        id:
+          type: number
+        date:
+          type: string
+          format: date
+        month:
+          type: string
+        description:
+          type: string
+        newWords:
+          type: number
+        studyMinutes:
+          type: number
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+      required: [id, date, month, description, newWords, studyMinutes, createdAt, updatedAt]
+    StudyInput:
+      type: object
+      properties:
+        date:
+          type: string
+          format: date
+        description:
+          type: string
+          minLength: 1
+        newWords:
+          type: number
+          minimum: 0
+        studyMinutes:
+          type: number
+          minimum: 0
+      required: [date, description, newWords, studyMinutes]
+    StudyUpdate:
+      type: object
+      properties:
+        date:
+          type: string
+          format: date
+        description:
+          type: string
+          minLength: 1
+        newWords:
+          type: number
+          minimum: 0
+        studyMinutes:
+          type: number
+          minimum: 0
+    Settings:
+      type: object
+      properties:
+        id:
+          type: number
+        language:
+          type: string
+        dailyGoal:
+          type: number
+        vocabularyGoal:
+          type: number
+        initialVocabulary:
+          type: number
+        startDate:
+          type: string
+          format: date
+        darkMode:
+          type: boolean
+      required: [id, language, dailyGoal, vocabularyGoal, initialVocabulary, startDate, darkMode]
+    SettingsInput:
+      type: object
+      properties:
+        language:
+          type: string
+          minLength: 1
+        dailyGoal:
+          type: number
+          minimum: 1
+        vocabularyGoal:
+          type: number
+          minimum: 1
+        initialVocabulary:
+          type: number
+          minimum: 0
+        startDate:
+          type: string
+          format: date
+        darkMode:
+          type: boolean
+      required: [language, dailyGoal, vocabularyGoal, initialVocabulary, startDate, darkMode]
+    Dashboard:
+      type: object
+      properties:
+        currentVocabulary:
+          type: number
+        vocabularyGoal:
+          type: number
+        remainingVocabulary:
+          type: number
+        progressPercent:
+          type: number
+        dailyGoal:
+          type: number
+        wordsToday:
+          type: number
+        minutesToday:
+          type: number
+        totalMinutes:
+          type: number
+        currentStreak:
+          type: number
+        bestStreak:
+          type: number
+        studyDays:
+          type: number
+        averageWords:
+          type: number
+        estimatedCompletionDate:
+          type: ["string", "null"]
+        nextMilestone:
+          type: number
+        nextMilestoneLabel:
+          type: string
+        wordsToMilestone:
+          type: number
+        dailyGoalReached:
+          type: boolean
+      required: [currentVocabulary, vocabularyGoal, remainingVocabulary, progressPercent, dailyGoal, wordsToday, minutesToday, totalMinutes, currentStreak, bestStreak, studyDays, averageWords, estimatedCompletionDate, nextMilestone, nextMilestoneLabel, wordsToMilestone, dailyGoalReached]
+    DailyProgress:
+      type: object
+      properties:
+        date:
+          type: string
+          format: date
+        newWords:
+          type: number
+        studyMinutes:
+          type: number
+        vocabulary:
+          type: number
+      required: [date, newWords, studyMinutes, vocabulary]
+    MonthlyProgress:
+      type: object
+      properties:
+        month:
+          type: string
+        newWords:
+          type: number
+        studyMinutes:
+          type: number
+        studyDays:
+          type: number
+      required: [month, newWords, studyMinutes, studyDays]
+    CaizLevel:
+      type: object
+      properties:
+        name:
+          type: string
+        threshold:
+          type: number
+        status:
+          type: string
+          enum: [completed, current, upcoming]
+      required: [name, threshold, status]
+    Progress:
+      type: object
+      properties:
+        daily:
+          type: array
+          items:
+            $ref: "#/components/schemas/DailyProgress"
+        monthly:
+          type: array
+          items:
+            $ref: "#/components/schemas/MonthlyProgress"
+        caiz:
+          type: array
+          items:
+            $ref: "#/components/schemas/CaizLevel"
+      required: [daily, monthly, caiz]
+    MonthlySummary:
+      type: object
+      properties:
+        month:
+          type: string
+        totalWords:
+          type: number
+        totalMinutes:
+          type: number
+        studyDays:
+          type: number
+        averageWords:
+          type: number
+        averageMinutes:
+          type: number
+        bestStreak:
+          type: number
+        reflectionGood:
+          type: string
+        reflectionImprove:
+          type: string
+        updatedAt:
+          type: string
+          format: date-time
+      required: [month, totalWords, totalMinutes, studyDays, averageWords, averageMinutes, bestStreak, reflectionGood, reflectionImprove, updatedAt]
+    MonthlySummaryInput:
+      type: object
+      properties:
+        reflectionGood:
+          type: string
+        reflectionImprove:
+          type: string
+      required: [reflectionGood, reflectionImprove]
