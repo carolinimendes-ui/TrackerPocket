@@ -23,8 +23,10 @@ import type {
   BadRequestResponse,
   Dashboard,
   GetProgressParams,
+  GetStudySessionSummaryParams,
   HealthStatus,
   ListStudiesParams,
+  ListStudySessionsParams,
   MonthlySummary,
   MonthlySummaryInput,
   NotFoundResponse,
@@ -33,6 +35,9 @@ import type {
   SettingsInput,
   Study,
   StudyInput,
+  StudySession,
+  StudySessionInput,
+  StudySessionSummary,
   StudyUpdate
 } from './api.schemas';
 
@@ -437,6 +442,316 @@ export const useDeleteStudy = <TError = ErrorType<NotFoundResponse>,
         TContext
       > => {
       return useMutation(getDeleteStudyMutationOptions(options));
+    }
+
+export const getListStudySessionsUrl = (params?: ListStudySessionsParams,) => {
+  const normalizedParams = new URLSearchParams();
+
+  Object.entries(params || {}).forEach(([key, value]) => {
+
+    if (value !== undefined) {
+      normalizedParams.append(key, value === null ? 'null' : String(value))
+    }
+  });
+
+  const stringifiedParams = normalizedParams.toString();
+
+  return stringifiedParams.length > 0 ? `/api/study-sessions?${stringifiedParams}` : `/api/study-sessions`
+}
+
+/**
+ * @summary List timed study sessions
+ */
+export const listStudySessions = async (params?: ListStudySessionsParams, options?: Parameters<typeof customFetch>[1]): Promise<StudySession[]> => {
+
+  return customFetch<StudySession[]>(getListStudySessionsUrl(params),
+  {
+    ...options,
+    method: 'GET'
+
+
+  }
+);}
+
+
+
+
+
+export const getListStudySessionsQueryKey = (params?: ListStudySessionsParams,) => {
+    return [
+    `/api/study-sessions`, ...(params ? [params] : [])
+    ] as const;
+    }
+
+
+export const getListStudySessionsQueryOptions = <TData = Awaited<ReturnType<typeof listStudySessions>>, TError = ErrorType<unknown>>(params?: ListStudySessionsParams, options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof listStudySessions>>, TError, TData>, request?: SecondParameter<typeof customFetch>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getListStudySessionsQueryKey(params);
+
+
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof listStudySessions>>> = ({ signal }) => listStudySessions(params, { signal, ...requestOptions });
+
+
+
+
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof listStudySessions>>, TError, TData> & { queryKey: QueryKey }
+}
+
+export type ListStudySessionsQueryResult = NonNullable<Awaited<ReturnType<typeof listStudySessions>>>
+export type ListStudySessionsQueryError = ErrorType<unknown>
+
+
+/**
+ * @summary List timed study sessions
+ */
+
+export function useListStudySessions<TData = Awaited<ReturnType<typeof listStudySessions>>, TError = ErrorType<unknown>>(
+ params?: ListStudySessionsParams, options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof listStudySessions>>, TError, TData>, request?: SecondParameter<typeof customFetch>}
+
+ ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+
+  const queryOptions = getListStudySessionsQueryOptions(params,options)
+
+  const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
+
+  return withQueryKey(query, queryOptions.queryKey);
+}
+
+
+
+
+
+
+
+export const getCreateStudySessionUrl = () => {
+
+
+
+
+  return `/api/study-sessions`
+}
+
+/**
+ * @summary Save a completed timed study session
+ */
+export const createStudySession = async (studySessionInput: StudySessionInput, options?: Parameters<typeof customFetch>[1]): Promise<StudySession> => {
+
+  return customFetch<StudySession>(getCreateStudySessionUrl(),
+  {
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(studySessionInput)
+  }
+);}
+
+
+
+
+
+export const getCreateStudySessionMutationOptions = <TError = ErrorType<BadRequestResponse>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createStudySession>>, TError,{data: BodyType<StudySessionInput>}, TContext>, request?: SecondParameter<typeof customFetch>}
+): UseMutationOptions<Awaited<ReturnType<typeof createStudySession>>, TError,{data: BodyType<StudySessionInput>}, TContext> => {
+
+const mutationKey = ['createStudySession'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof createStudySession>>, {data: BodyType<StudySessionInput>}> = (props) => {
+          const {data} = props ?? {};
+
+          return  createStudySession(data,requestOptions)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type CreateStudySessionMutationResult = NonNullable<Awaited<ReturnType<typeof createStudySession>>>
+    export type CreateStudySessionMutationBody = BodyType<StudySessionInput>
+    export type CreateStudySessionMutationError = ErrorType<BadRequestResponse>
+
+    /**
+ * @summary Save a completed timed study session
+ */
+export const useCreateStudySession = <TError = ErrorType<BadRequestResponse>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createStudySession>>, TError,{data: BodyType<StudySessionInput>}, TContext>, request?: SecondParameter<typeof customFetch>}
+ ): UseMutationResult<
+        Awaited<ReturnType<typeof createStudySession>>,
+        TError,
+        {data: BodyType<StudySessionInput>},
+        TContext
+      > => {
+      return useMutation(getCreateStudySessionMutationOptions(options));
+    }
+
+export const getGetStudySessionSummaryUrl = (params?: GetStudySessionSummaryParams,) => {
+  const normalizedParams = new URLSearchParams();
+
+  Object.entries(params || {}).forEach(([key, value]) => {
+
+    if (value !== undefined) {
+      normalizedParams.append(key, value === null ? 'null' : String(value))
+    }
+  });
+
+  const stringifiedParams = normalizedParams.toString();
+
+  return stringifiedParams.length > 0 ? `/api/study-sessions/summary?${stringifiedParams}` : `/api/study-sessions/summary`
+}
+
+/**
+ * @summary Get timed study session analytics
+ */
+export const getStudySessionSummary = async (params?: GetStudySessionSummaryParams, options?: Parameters<typeof customFetch>[1]): Promise<StudySessionSummary> => {
+
+  return customFetch<StudySessionSummary>(getGetStudySessionSummaryUrl(params),
+  {
+    ...options,
+    method: 'GET'
+
+
+  }
+);}
+
+
+
+
+
+export const getGetStudySessionSummaryQueryKey = (params?: GetStudySessionSummaryParams,) => {
+    return [
+    `/api/study-sessions/summary`, ...(params ? [params] : [])
+    ] as const;
+    }
+
+
+export const getGetStudySessionSummaryQueryOptions = <TData = Awaited<ReturnType<typeof getStudySessionSummary>>, TError = ErrorType<unknown>>(params?: GetStudySessionSummaryParams, options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof getStudySessionSummary>>, TError, TData>, request?: SecondParameter<typeof customFetch>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetStudySessionSummaryQueryKey(params);
+
+
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getStudySessionSummary>>> = ({ signal }) => getStudySessionSummary(params, { signal, ...requestOptions });
+
+
+
+
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getStudySessionSummary>>, TError, TData> & { queryKey: QueryKey }
+}
+
+export type GetStudySessionSummaryQueryResult = NonNullable<Awaited<ReturnType<typeof getStudySessionSummary>>>
+export type GetStudySessionSummaryQueryError = ErrorType<unknown>
+
+
+/**
+ * @summary Get timed study session analytics
+ */
+
+export function useGetStudySessionSummary<TData = Awaited<ReturnType<typeof getStudySessionSummary>>, TError = ErrorType<unknown>>(
+ params?: GetStudySessionSummaryParams, options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof getStudySessionSummary>>, TError, TData>, request?: SecondParameter<typeof customFetch>}
+
+ ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+
+  const queryOptions = getGetStudySessionSummaryQueryOptions(params,options)
+
+  const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
+
+  return withQueryKey(query, queryOptions.queryKey);
+}
+
+
+
+
+
+
+
+export const getDeleteStudySessionUrl = (id: number,) => {
+
+
+
+
+  return `/api/study-sessions/${id}`
+}
+
+/**
+ * @summary Delete a timed study session
+ */
+export const deleteStudySession = async (id: number, options?: Parameters<typeof customFetch>[1]): Promise<void> => {
+
+  return customFetch<void>(getDeleteStudySessionUrl(id),
+  {
+    ...options,
+    method: 'DELETE'
+
+
+  }
+);}
+
+
+
+
+
+export const getDeleteStudySessionMutationOptions = <TError = ErrorType<BadRequestResponse | NotFoundResponse>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteStudySession>>, TError,{id: number}, TContext>, request?: SecondParameter<typeof customFetch>}
+): UseMutationOptions<Awaited<ReturnType<typeof deleteStudySession>>, TError,{id: number}, TContext> => {
+
+const mutationKey = ['deleteStudySession'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof deleteStudySession>>, {id: number}> = (props) => {
+          const {id} = props ?? {};
+
+          return  deleteStudySession(id,requestOptions)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type DeleteStudySessionMutationResult = NonNullable<Awaited<ReturnType<typeof deleteStudySession>>>
+
+    export type DeleteStudySessionMutationError = ErrorType<BadRequestResponse | NotFoundResponse>
+
+    /**
+ * @summary Delete a timed study session
+ */
+export const useDeleteStudySession = <TError = ErrorType<BadRequestResponse | NotFoundResponse>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteStudySession>>, TError,{id: number}, TContext>, request?: SecondParameter<typeof customFetch>}
+ ): UseMutationResult<
+        Awaited<ReturnType<typeof deleteStudySession>>,
+        TError,
+        {id: number},
+        TContext
+      > => {
+      return useMutation(getDeleteStudySessionMutationOptions(options));
     }
 
 export const getGetDashboardUrl = () => {

@@ -1,10 +1,11 @@
 import { useState, type HTMLAttributes, type ReactNode } from 'react';
 import { Link, useLocation } from 'wouter';
-import { BarChart3, BookOpen, CalendarDays, ChevronRight, CircleUserRound, Compass, Headphones, LayoutDashboard, Menu, Moon, Settings, Sparkles, Sun, X } from 'lucide-react';
+import { BarChart3, BookOpen, CalendarDays, ChevronRight, CircleUserRound, Compass, Headphones, LayoutDashboard, Menu, Moon, Settings, Sparkles, Sun, Timer, X } from 'lucide-react';
 
 const nav = [
   { href: '/', label: 'Visão geral', icon: LayoutDashboard },
   { href: '/register', label: 'Registrar estudo', icon: BookOpen },
+  { href: '/sessao', label: 'Sessão de estudos', icon: Timer },
   { href: '/progresso', label: 'Progresso', icon: BarChart3 },
   { href: '/caiz', label: 'Jornada CAIZ', icon: Compass },
   { href: '/historico', label: 'Histórico', icon: CalendarDays },

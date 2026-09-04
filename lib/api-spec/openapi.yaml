@@ -12,6 +12,8 @@ tags:
     description: Health operations
   - name: studies
     description: Daily study records
+  - name: study-sessions
+    description: Timed study sessions and analytics
   - name: dashboard
     description: Dashboard aggregates
   - name: progress
@@ -108,6 +110,69 @@ paths:
       responses:
         "204":
           description: Deleted
+        "404":
+          $ref: "#/components/responses/NotFound"
+  /study-sessions:
+    get:
+      operationId: listStudySessions
+      tags: [study-sessions]
+      summary: List timed study sessions
+      parameters:
+        - $ref: "#/components/parameters/Range"
+      responses:
+        "200":
+          description: Timed study sessions
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/StudySession"
+    post:
+      operationId: createStudySession
+      tags: [study-sessions]
+      summary: Save a completed timed study session
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/StudySessionInput"
+      responses:
+        "201":
+          description: Created timed study session
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/StudySession"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+  /study-sessions/summary:
+    get:
+      operationId: getStudySessionSummary
+      tags: [study-sessions]
+      summary: Get timed study session analytics
+      parameters:
+        - $ref: "#/components/parameters/Range"
+      responses:
+        "200":
+          description: Timed study session analytics
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/StudySessionSummary"
+  /study-sessions/{id}:
+    delete:
+      operationId: deleteStudySession
+      tags: [study-sessions]
+      summary: Delete a timed study session
+      parameters:
+        - $ref: "#/components/parameters/StudySessionId"
+      responses:
+        "204":
+          description: Session deleted
+        "400":
+          $ref: "#/components/responses/BadRequest"
         "404":
           $ref: "#/components/responses/NotFound"
   /dashboard:
@@ -219,6 +284,13 @@ paths:
 components:
   parameters:
     StudyId:
+      name: id
+      in: path
+      required: true
+      schema:
+        type: number
+        minimum: 1
+    StudySessionId:
       name: id
       in: path
       required: true
@@ -370,6 +442,93 @@ components:
         studyMinutes:
           type: number
           minimum: 0
+    StudySession:
+      type: object
+      properties:
+        id:
+          type: number
+        date:
+          type: string
+          format: date
+        description:
+          type: string
+        category:
+          type: string
+        durationSeconds:
+          type: number
+        startedAt:
+          type: string
+          format: date-time
+        endedAt:
+          type: string
+          format: date-time
+        createdAt:
+          type: string
+          format: date-time
+      required: [id, date, description, category, durationSeconds, startedAt, endedAt, createdAt]
+    StudySessionInput:
+      type: object
+      properties:
+        date:
+          type: string
+          format: date
+        description:
+          type: string
+          minLength: 1
+        category:
+          type: string
+          minLength: 1
+        durationSeconds:
+          type: number
+          minimum: 1
+        startedAt:
+          type: string
+          format: date-time
+        endedAt:
+          type: string
+          format: date-time
+      required: [date, description, category, durationSeconds, startedAt, endedAt]
+    DailySessionSummary:
+      type: object
+      properties:
+        date:
+          type: string
+          format: date
+        seconds:
+          type: number
+        sessions:
+          type: number
+      required: [date, seconds, sessions]
+    CategorySessionSummary:
+      type: object
+      properties:
+        category:
+          type: string
+        seconds:
+          type: number
+        sessions:
+          type: number
+      required: [category, seconds, sessions]
+    StudySessionSummary:
+      type: object
+      properties:
+        totalSeconds:
+          type: number
+        totalSessions:
+          type: number
+        activeDays:
+          type: number
+        averageSeconds:
+          type: number
+        daily:
+          type: array
+          items:
+            $ref: "#/components/schemas/DailySessionSummary"
+        byCategory:
+          type: array
+          items:
+            $ref: "#/components/schemas/CategorySessionSummary"
+      required: [totalSeconds, totalSessions, activeDays, averageSeconds, daily, byCategory]
     Settings:
       type: object
       properties:

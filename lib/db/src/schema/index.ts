@@ -20,3 +20,4 @@
 export * from "./studies";
 export * from "./settings";
 export * from "./monthly-summaries";
+export * from "./study-sessions";

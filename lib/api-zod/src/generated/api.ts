@@ -133,6 +133,105 @@ export const DeleteStudyResponse = zod.void()
 
 
 /**
+ * @summary List timed study sessions
+ */
+export const listStudySessionsQueryRangeDefault = 30;
+export const listStudySessionsQueryRangeMin = 7;
+export const listStudySessionsQueryRangeMax = 365;
+
+
+
+export const ListStudySessionsQueryParams = zod.object({
+  "range": zod.coerce.number().min(listStudySessionsQueryRangeMin).max(listStudySessionsQueryRangeMax).default(listStudySessionsQueryRangeDefault)
+})
+
+export const ListStudySessionsResponseItem = zod.object({
+  "id": zod.number(),
+  "date": zod.coerce.date(),
+  "description": zod.string(),
+  "category": zod.string(),
+  "durationSeconds": zod.number(),
+  "startedAt": zod.coerce.date(),
+  "endedAt": zod.coerce.date(),
+  "createdAt": zod.coerce.date()
+})
+export const ListStudySessionsResponse = zod.array(ListStudySessionsResponseItem)
+
+
+/**
+ * @summary Save a completed timed study session
+ */
+
+
+
+
+
+export const CreateStudySessionBody = zod.object({
+  "date": zod.coerce.date(),
+  "description": zod.string().min(1),
+  "category": zod.string().min(1),
+  "durationSeconds": zod.number().min(1),
+  "startedAt": zod.coerce.date(),
+  "endedAt": zod.coerce.date()
+})
+
+export const CreateStudySessionResponse = zod.object({
+  "id": zod.number(),
+  "date": zod.coerce.date(),
+  "description": zod.string(),
+  "category": zod.string(),
+  "durationSeconds": zod.number(),
+  "startedAt": zod.coerce.date(),
+  "endedAt": zod.coerce.date(),
+  "createdAt": zod.coerce.date()
+})
+
+
+/**
+ * @summary Get timed study session analytics
+ */
+export const getStudySessionSummaryQueryRangeDefault = 30;
+export const getStudySessionSummaryQueryRangeMin = 7;
+export const getStudySessionSummaryQueryRangeMax = 365;
+
+
+
+export const GetStudySessionSummaryQueryParams = zod.object({
+  "range": zod.coerce.number().min(getStudySessionSummaryQueryRangeMin).max(getStudySessionSummaryQueryRangeMax).default(getStudySessionSummaryQueryRangeDefault)
+})
+
+export const GetStudySessionSummaryResponse = zod.object({
+  "totalSeconds": zod.number(),
+  "totalSessions": zod.number(),
+  "activeDays": zod.number(),
+  "averageSeconds": zod.number(),
+  "daily": zod.array(zod.object({
+  "date": zod.coerce.date(),
+  "seconds": zod.number(),
+  "sessions": zod.number()
+})),
+  "byCategory": zod.array(zod.object({
+  "category": zod.string(),
+  "seconds": zod.number(),
+  "sessions": zod.number()
+}))
+})
+
+
+/**
+ * @summary Delete a timed study session
+ */
+
+
+
+export const DeleteStudySessionParams = zod.object({
+  "id": zod.coerce.number().min(1)
+})
+
+export const DeleteStudySessionResponse = zod.void()
+
+
+/**
  * @summary Get dashboard summary
  */
 export const GetDashboardResponse = zod.object({

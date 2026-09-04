@@ -6,6 +6,7 @@ import { TooltipProvider } from '@/components/ui/tooltip';
 import NotFound from '@/pages/not-found';
 import { TrackerShell } from '@/components/tracker-shell';
 import { CaizPage, DashboardPage, HistoryPage, MonthlySummaryPage, PlaylistsPage, ProgressPage, RegisterPage, SettingsPage } from '@/pages/tracker-pages';
+import StudySessionPage from '@/pages/study-session-page';
 import {
   Route,
   Switch,
@@ -28,6 +29,7 @@ function Router() {
         <Switch>
           <Route path="/" component={DashboardPage} />
           <Route path="/register" component={RegisterPage} />
+          <Route path="/sessao" component={StudySessionPage} />
           <Route path="/progresso" component={ProgressPage} />
           <Route path="/caiz" component={CaizPage} />
           <Route path="/historico" component={HistoryPage} />

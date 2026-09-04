@@ -44,6 +44,50 @@ export interface StudyUpdate {
   studyMinutes?: number;
 }
 
+export interface StudySession {
+  id: number;
+  date: string;
+  description: string;
+  category: string;
+  durationSeconds: number;
+  startedAt: string;
+  endedAt: string;
+  createdAt: string;
+}
+
+export interface StudySessionInput {
+  date: string;
+  /** @minLength 1 */
+  description: string;
+  /** @minLength 1 */
+  category: string;
+  /** @minimum 1 */
+  durationSeconds: number;
+  startedAt: string;
+  endedAt: string;
+}
+
+export interface DailySessionSummary {
+  date: string;
+  seconds: number;
+  sessions: number;
+}
+
+export interface CategorySessionSummary {
+  category: string;
+  seconds: number;
+  sessions: number;
+}
+
+export interface StudySessionSummary {
+  totalSeconds: number;
+  totalSessions: number;
+  activeDays: number;
+  averageSeconds: number;
+  daily: DailySessionSummary[];
+  byCategory: CategorySessionSummary[];
+}
+
 export interface Settings {
   id: number;
   language: string;
@@ -190,6 +234,22 @@ minMinutes?: MinMinutesParameter;
  * @minimum 0
  */
 maxMinutes?: MaxMinutesParameter;
+};
+
+export type ListStudySessionsParams = {
+/**
+ * @minimum 7
+ * @maximum 365
+ */
+range?: RangeParameter;
+};
+
+export type GetStudySessionSummaryParams = {
+/**
+ * @minimum 7
+ * @maximum 365
+ */
+range?: RangeParameter;
 };
 
 export type GetProgressParams = {
