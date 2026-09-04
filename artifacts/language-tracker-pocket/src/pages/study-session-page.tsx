@@ -11,6 +11,7 @@ import {
 } from '@workspace/api-client-react';
 import type { StudySession, StudySessionSummary } from '@workspace/api-client-react';
 import { EmptyState, ErrorState, LoadingState, PageHeading, Surface } from '@/components/tracker-shell';
+import { formatBrasiliaDate, formatBrasiliaTime, getBrasiliaDateKey } from '@/lib/brasilia-date';
 
 const TIMER_STORAGE_KEY = 'language-tracker-pocket:study-timer';
 const SESSION_RANGE = 30;
@@ -43,9 +44,7 @@ function formatDuration(totalSeconds: number) {
 }
 
 function formatDate(value: string) {
-  return new Intl.DateTimeFormat('pt-BR', { day: '2-digit', month: 'short', year: 'numeric' })
-    .format(new Date(value.includes('T') ? value : `${value}T12:00:00`))
-    .replace('.', '');
+  return formatBrasiliaDate(value);
 }
 
 function dateOnly(value: string) {
@@ -53,13 +52,11 @@ function dateOnly(value: string) {
 }
 
 function formatTime(value: string) {
-  return new Intl.DateTimeFormat('pt-BR', { hour: '2-digit', minute: '2-digit' }).format(new Date(value));
+  return formatBrasiliaTime(value);
 }
 
 function localDate() {
-  const now = new Date();
-  const offset = now.getTimezoneOffset() * 60_000;
-  return new Date(now.getTime() - offset).toISOString().slice(0, 10);
+  return getBrasiliaDateKey();
 }
 
 function readPersistedTimer(): PersistedTimer | null {

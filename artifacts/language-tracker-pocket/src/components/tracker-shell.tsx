@@ -1,6 +1,7 @@
 import { useState, type HTMLAttributes, type ReactNode } from 'react';
 import { Link, useLocation } from 'wouter';
 import { BarChart3, BookOpen, CalendarDays, ChevronRight, CircleUserRound, Compass, Headphones, LayoutDashboard, Menu, Moon, Settings, Sparkles, Sun, Timer, X } from 'lucide-react';
+import { formatBrasiliaLongDate, useBrasiliaNow } from '@/lib/brasilia-date';
 
 const nav = [
   { href: '/', label: 'Visão geral', icon: LayoutDashboard },
@@ -17,6 +18,7 @@ const nav = [
 export function TrackerShell({ children, vocabulary = 4242, goal = 6000, darkMode = false, onToggleTheme }: { children: ReactNode; vocabulary?: number; goal?: number; darkMode?: boolean; onToggleTheme?: () => void }) {
   const [open, setOpen] = useState(false);
   const [location] = useLocation();
+  const brasiliaNow = useBrasiliaNow();
   const percent = Math.min(100, Math.round((vocabulary / goal) * 100));
   return (
     <div className={`grain min-h-[100dvh] bg-background text-foreground ${darkMode ? 'dark' : ''}`}>
@@ -48,7 +50,7 @@ export function TrackerShell({ children, vocabulary = 4242, goal = 6000, darkMod
       <div className="md:pl-[264px]">
         <header className="sticky top-0 z-20 flex h-[72px] items-center justify-between border-b border-border/70 bg-background/85 px-5 backdrop-blur-md md:px-10">
           <button onClick={() => setOpen(true)} className="rounded-xl p-2 text-muted-foreground hover:bg-muted md:hidden" data-testid="button-open-menu"><Menu size={21} /></button>
-          <div className="hidden items-center gap-2 font-mono-custom text-[10px] uppercase tracking-[.16em] text-muted-foreground md:flex"><span className="h-1.5 w-1.5 rounded-full bg-primary" /> quinta-feira, 3 de setembro de 2026</div>
+          <div className="hidden items-center gap-2 font-mono-custom text-[10px] uppercase tracking-[.16em] text-muted-foreground md:flex"><span className="h-1.5 w-1.5 rounded-full bg-primary" /> {formatBrasiliaLongDate(brasiliaNow)}</div>
           <div className="ml-auto flex items-center gap-3"><span className="hidden text-xs text-muted-foreground sm:inline">Seu ritmo, uma palavra por vez.</span><button onClick={onToggleTheme} className="rounded-xl border border-border bg-card p-2.5 text-muted-foreground transition hover:text-primary md:hidden" data-testid="button-toggle-theme-mobile">{darkMode ? <Sun size={16} /> : <Moon size={16} />}</button></div>
         </header>
         <main className="mx-auto max-w-[1180px] px-5 py-8 md:px-10 md:py-11">{children}</main>

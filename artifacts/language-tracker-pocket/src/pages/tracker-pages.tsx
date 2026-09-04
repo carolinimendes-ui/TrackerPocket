@@ -6,10 +6,9 @@ import { useCreateStudy, useDeleteStudy, useGetDashboard, useGetMonthlySummary, 
 import type { CaizLevel, MonthlyProgress, Study } from '@workspace/api-client-react';
 import { useToast } from '@/hooks/use-toast';
 import { EmptyState, ErrorState, LoadingState, PageHeading, Surface } from '@/components/tracker-shell';
+import { formatBrasiliaDayStamp, getBrasiliaDateKey, getBrasiliaMonthKey, getBrasiliaGreeting, useBrasiliaNow } from '@/lib/brasilia-date';
 
 const nf = new Intl.NumberFormat('pt-BR');
-const today = '2026-09-03';
-const monthNow = '2026-09';
 const monthLabel = (month: string) => new Intl.DateTimeFormat('pt-BR', { month: 'long', year: 'numeric' }).format(new Date(`${month}-02T12:00:00`));
 const dateOnly = (value: string | Date) => (value instanceof Date ? value.toISOString() : value).slice(0, 10);
 const dateAtNoon = (value: string | Date) => new Date(`${dateOnly(value)}T12:00:00`);
@@ -24,11 +23,12 @@ function Metric({ icon: Icon, label, value, note, accent = 'orange' }: { icon: C
 export function DashboardPage() {
   const { data, isLoading, isError, refetch } = useGetDashboard();
   const { toast } = useToast();
+  const brasiliaNow = useBrasiliaNow();
   if (isLoading) return <LoadingState />;
   if (isError || !data) return <ErrorState onRetry={() => refetch()} />;
   const progress = data.progressPercent ?? pct(data.currentVocabulary, data.vocabularyGoal);
   return <div className="page-enter">
-    <div className="mb-8"><p className="font-mono-custom text-[10px] uppercase tracking-[.2em] text-primary">QUINTA-FEIRA · 03.09.2026</p><h1 className="mt-2 font-display text-4xl font-bold tracking-[-.055em] md:text-5xl">Boa tarde, Carolini<span className="text-primary">.</span></h1><p className="mt-2 text-sm text-muted-foreground">Continue construindo seu vocabulário e acompanhe sua evolução.</p></div>
+    <div className="mb-8"><p className="font-mono-custom text-[10px] uppercase tracking-[.2em] text-primary">{formatBrasiliaDayStamp(brasiliaNow)}</p><h1 className="mt-2 font-display text-4xl font-bold tracking-[-.055em] md:text-5xl">{getBrasiliaGreeting(brasiliaNow)}, Carolini<span className="text-primary">.</span></h1><p className="mt-2 text-sm text-muted-foreground">Continue construindo seu vocabulário e acompanhe sua evolução.</p></div>
     <Surface className="relative overflow-hidden border-primary/15 bg-[linear-gradient(112deg,hsl(var(--primary))_0%,hsl(23_91%_46%)_64%,hsl(13_80%_42%)_100%)] p-6 text-primary-foreground shadow-[0_16px_36px_hsl(var(--primary)/.18)] md:p-8">
       <div className="absolute -right-10 -top-16 h-48 w-48 rounded-full border-[28px] border-primary-foreground/10" /><div className="absolute bottom-[-70px] right-[18%] h-44 w-44 rounded-full border-[22px] border-primary-foreground/5" />
       <div className="relative flex flex-col justify-between gap-7 md:flex-row md:items-end"><div><p className="text-[11px] font-semibold uppercase tracking-[.14em] text-primary-foreground/70">Progresso do vocabulário</p><p className="mt-2 font-display text-3xl font-bold tracking-[-.04em]">{nf.format(data.currentVocabulary)} <span className="text-primary-foreground/55">/</span> {nf.format(data.vocabularyGoal)} <span className="text-lg">palavras</span></p><div className="mt-3 h-2 max-w-[620px] overflow-hidden rounded-full bg-primary-foreground/20"><div className="progress-grow h-full rounded-full bg-primary-foreground" style={{ width: `${progress}%` }} /></div><p className="mt-2 text-xs font-semibold">{progress.toLocaleString('pt-BR')}% concluído</p></div><div className="grid grid-cols-2 gap-6 text-right text-xs"><div><p className="text-primary-foreground/65">Faltam para a meta</p><p className="mt-1 font-display text-xl font-bold">{nf.format(data.remainingVocabulary)}</p><p className="text-primary-foreground/65">palavras</p></div><div><p className="text-primary-foreground/65">Próximo marco</p><p className="mt-1 font-display text-xl font-bold">{nf.format(data.nextMilestone)}</p><p className="text-primary-foreground/65">{data.nextMilestoneLabel}</p></div></div></div>
@@ -57,7 +57,7 @@ export function RegisterPage() {
   const editId = Number(new URLSearchParams(location.split('?')[1] ?? '').get('id') ?? 0);
   const editing = editId > 0;
   const current = studies?.find(item => item.id === editId);
-  const [form, setForm] = useState({ date: today, description: '', newWords: '12', studyMinutes: '30' });
+  const [form, setForm] = useState(() => ({ date: getBrasiliaDateKey(), description: '', newWords: '12', studyMinutes: '30' }));
   useEffect(() => { if (current) setForm({ date: dateOnly(current.date), description: current.description, newWords: String(current.newWords), studyMinutes: String(current.studyMinutes) }); }, [current]);
   if (isLoading) return <LoadingState />;
   if (isError) return <ErrorState onRetry={() => refetch()} />;
@@ -104,7 +104,7 @@ export function HistoryPage() {
 
 export function MonthlySummaryPage() {
   const { data: summaries, isLoading: listLoading, isError: listError, refetch } = useListMonthlySummaries();
-  const [month, setMonth] = useState(monthNow);
+  const [month, setMonth] = useState(() => getBrasiliaMonthKey());
   const { data: summary, isLoading: summaryLoading } = useGetMonthlySummary(month);
   const upsert = useUpsertMonthlySummary();
   const { toast } = useToast();
